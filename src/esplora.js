@@ -7,7 +7,7 @@
  * @license LPGL3
  */
 
-const requestPromise = require('request-promise')
+// const requestPromise = require('request-promise')
 require('./extend-error.js')
 const URLError = Error.extend('URLError')
 
@@ -40,14 +40,16 @@ module.exports = class Esplora {
       timeout: this.timeout,
       gzip: true
     }
-    return requestPromise(options)
-      .then(body => {
-        if (!body) { throw URLError('Empty body') }
-        return body
-      }).catch(err => {
-        console.error('Response error: ' + err.toString().substr(0, 100))
-        throw err
-      })
+    console.log('opentimestamps blockhash')
+    // return requestPromise(options)
+    //   .then(body => {
+    //     if (!body) { throw URLError('Empty body') }
+    //     return body
+    //   }).catch(err => {
+    //     console.error('Response error: ' + err.toString().substr(0, 100))
+    //     throw err
+    //   })
+    return {}
   }
 
   /**
@@ -64,16 +66,19 @@ module.exports = class Esplora {
       timeout: this.timeout,
       gzip: true
     }
-    return requestPromise(options)
-      .then(body => {
-        if (!body) { throw URLError('Empty body') }
-        if (!body.merkle_root || !body.timestamp) {
-          throw URLError(body)
-        }
-        return { merkleroot: body.merkle_root, time: body.timestamp }
-      }).catch(err => {
-        console.error('Response error: ' + err.toString().substr(0, 100))
-        throw err
-      })
+    
+    console.log('opentimestamps block')
+    // return requestPromise(options)
+    //   .then(body => {
+    //     if (!body) { throw URLError('Empty body') }
+    //     if (!body.merkle_root || !body.timestamp) {
+    //       throw URLError(body)
+    //     }
+    //     return { merkleroot: body.merkle_root, time: body.timestamp }
+    //   }).catch(err => {
+    //     console.error('Response error: ' + err.toString().substr(0, 100))
+    //     throw err
+    //   })
+    return {}
   }
 }

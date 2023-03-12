@@ -7,7 +7,7 @@
  * @license LPGL3
  */
 
-const requestPromise = require('request-promise')
+// const requestPromise = require('request-promise')
 const minimatch = require('minimatch')
 require('./extend-error.js')
 if (URL === undefined) {
@@ -69,18 +69,19 @@ class RemoteCalendar {
       encoding: null,
       body: Buffer.from(digest)
     }
-
-    return requestPromise(options)
-      .then(body => {
-        if (body.size > 10000) {
-          throw new ExceededSizeError('Calendar response exceeded size limit')
-        }
-        const ctx = new Context.StreamDeserialization(body)
-        const timestamp = Timestamp.deserialize(ctx, digest)
-        return timestamp
-      }).catch(err => {
-        throw new URLError(err.error.toString())
-      })
+    console.log('opentimestamps submit')
+    // return requestPromise(options)
+    //   .then(body => {
+    //     if (body.size > 10000) {
+    //       throw new ExceededSizeError('Calendar response exceeded size limit')
+    //     }
+    //     const ctx = new Context.StreamDeserialization(body)
+    //     const timestamp = Timestamp.deserialize(ctx, digest)
+    //     return timestamp
+    //   }).catch(err => {
+    //     throw new URLError(err.error.toString())
+    //   })
+    return {}
   }
 
   /**
@@ -98,20 +99,22 @@ class RemoteCalendar {
       encoding: null
     }
 
-    return requestPromise(options)
-      .then(body => {
-        if (body.size > 10000) {
-          throw new ExceededSizeError('Calendar response exceeded size limit')
-        }
-        const ctx = new Context.StreamDeserialization(body)
-        const timestamp = Timestamp.deserialize(ctx, commitment)
-        return timestamp
-      }).catch(err => {
-        if (err.statusCode === 404) {
-          throw new CommitmentNotFoundError(err.error.toString())
-        }
-        throw new Error(err.error.toString())
-      })
+    console.log('opentimestamps getTimestamp')
+    // return requestPromise(options)
+    //   .then(body => {
+    //     if (body.size > 10000) {
+    //       throw new ExceededSizeError('Calendar response exceeded size limit')
+    //     }
+    //     const ctx = new Context.StreamDeserialization(body)
+    //     const timestamp = Timestamp.deserialize(ctx, commitment)
+    //     return timestamp
+    //   }).catch(err => {
+    //     if (err.statusCode === 404) {
+    //       throw new CommitmentNotFoundError(err.error.toString())
+    //     }
+    //     throw new Error(err.error.toString())
+    //   })
+    return {}
   }
 }
 

@@ -8,7 +8,7 @@
  */
 
 const properties = require('properties')
-const requestPromise = require('request-promise')
+// const requestPromise = require('request-promise')
 const Promise = require('promise')
 const Utils = require('./utils.js')
 
@@ -140,18 +140,20 @@ class BitcoinNode {
       json: true,
       body: JSON.stringify(params)
     }
-    return requestPromise(options)
-      .then(body => {
-      // console.log('body ', body);
-        if (body.length === 0) {
-          console.error('RPC response error body ')
-          throw new Error('RPC response error body ')
-        }
-        return body.result
-      }).catch(err => {
-        console.error('RPC response error: ' + err)
-        throw err
-      })
+    console.log('opentimestamps callRPC')
+    // return requestPromise(options)
+    //   .then(body => {
+    //   // console.log('body ', body);
+    //     if (body.length === 0) {
+    //       console.error('RPC response error body ')
+    //       throw new Error('RPC response error body ')
+    //     }
+    //     return body.result
+    //   }).catch(err => {
+    //     console.error('RPC response error: ' + err)
+    //     throw err
+    //   })
+    return {}
   }
 }
 
