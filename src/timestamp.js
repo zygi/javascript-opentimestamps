@@ -7,7 +7,7 @@
  * @license LPGL3
  */
 
-const bitcore = require('bitcore-lib')
+// const bitcore = require('bitcore-lib')
 const Utils = require('./utils.js')
 const Notary = require('./notary.js')
 const Ops = require('./ops.js')
@@ -249,12 +249,12 @@ class Timestamp {
     }
 
     json.result = Utils.bytesToHex(this.msg)
-    try {
-      bitcore.Transaction(Utils.bytesToHex(this.msg))
-      json.tx = new Ops.OpSHA256().call(new Ops.OpSHA256().call(this.msg))
-      json.tx = Utils.bytesToHex(json.tx.slice().reverse())
-    } catch (err) {
-    }
+    // try {
+    //   bitcore.Transaction(Utils.bytesToHex(this.msg))
+    //   json.tx = new Ops.OpSHA256().call(new Ops.OpSHA256().call(this.msg))
+    //   json.tx = Utils.bytesToHex(json.tx.slice().reverse())
+    // } catch (err) {
+    // }
 
     if (this.ops.size > 1) {
       fork++
@@ -269,12 +269,12 @@ class Timestamp {
         item.arg = (op.arg === undefined) ? '' : Utils.bytesToHex(op.arg)
         item.result = Utils.bytesToHex(timestamp.msg)
         item.timestamp = timestamp.toJson(fork + count)
-        try {
-          bitcore.Transaction(Utils.bytesToHex(timestamp.msg))
-          item.tx = new Ops.OpSHA256().call(new Ops.OpSHA256().call(timestamp.msg))
-          item.tx = Utils.bytesToHex(item.tx.slice().reverse())
-        } catch (err) {
-        }
+        // try {
+        //   bitcore.Transaction(Utils.bytesToHex(timestamp.msg))
+        //   item.tx = new Ops.OpSHA256().call(new Ops.OpSHA256().call(timestamp.msg))
+        //   item.tx = Utils.bytesToHex(item.tx.slice().reverse())
+        // } catch (err) {
+        // }
         json.ops.push(item)
         count++
       })
@@ -359,26 +359,26 @@ class Timestamp {
     }
     if (this.ops.size > 1) {
       this.ops.forEach((timestamp, op) => {
-        try {
-          bitcore.Transaction(Utils.bytesToHex(this.msg))
-          let tx = new Ops.OpReverse().call(new Ops.OpSHA256().call(new Ops.OpSHA256().call(this.msg)))
-          tx = Utils.bytesToHex(tx)
-          r += Timestamp.indention(indent) + '# Bitcoin transaction id ' + tx + '\n'
-        } catch (err) {
-        }
+        // try {
+        //   bitcore.Transaction(Utils.bytesToHex(this.msg))
+        //   let tx = new Ops.OpReverse().call(new Ops.OpSHA256().call(new Ops.OpSHA256().call(this.msg)))
+        //   tx = Utils.bytesToHex(tx)
+        //   r += Timestamp.indention(indent) + '# Bitcoin transaction id ' + tx + '\n'
+        // } catch (err) {
+        // }
         const curRes = op.call(this.msg)
         const curPar = op.arg
         r += Timestamp.indention(indent) + ' -> ' + op.toString() + strResult(verbosity, curPar, curRes) + '\n'
         r += timestamp.strTree(indent + 1, verbosity)
       })
     } else if (this.ops.size > 0) {
-      try {
-        bitcore.Transaction(Utils.bytesToHex(this.msg))
-        let tx = new Ops.OpReverse().call(new Ops.OpSHA256().call(new Ops.OpSHA256().call(this.msg)))
-        tx = Utils.bytesToHex(tx)
-        r += Timestamp.indention(indent) + '# transaction id ' + tx + '\n'
-      } catch (err) {
-      }
+      // try {
+      //   bitcore.Transaction(Utils.bytesToHex(this.msg))
+      //   let tx = new Ops.OpReverse().call(new Ops.OpSHA256().call(new Ops.OpSHA256().call(this.msg)))
+      //   tx = Utils.bytesToHex(tx)
+      //   r += Timestamp.indention(indent) + '# transaction id ' + tx + '\n'
+      // } catch (err) {
+      // }
       const op = this.ops.keys().next().value
       const stamp = this.ops.values().next().value
       const curRes = op.call(this.msg)
