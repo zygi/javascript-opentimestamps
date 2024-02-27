@@ -8,7 +8,6 @@
  */
 
 const properties = require('properties')
-// const requestPromise = require('request-promise')
 const Promise = require('promise')
 const Utils = require('./utils.js')
 

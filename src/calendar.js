@@ -7,7 +7,6 @@
  * @license LPGL3
  */
 
-// const requestPromise = require('request-promise')
 const fetch = require('cross-fetch');
 const minimatch = require('minimatch')
 require('./extend-error.js')
