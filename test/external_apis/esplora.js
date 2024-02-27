@@ -1,5 +1,5 @@
 const test = require('tape')
-const Esplora = require('../src/esplora.js')
+const Esplora = require('../../src/esplora.js')
 
 test('esplora.js test', assert => {
   assert.pass('This test will pass.')

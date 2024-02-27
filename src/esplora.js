@@ -7,7 +7,7 @@
  * @license LPGL3
  */
 
-// const requestPromise = require('request-promise')
+const fetch = require('cross-fetch');
 require('./extend-error.js')
 const URLError = Error.extend('URLError')
 
@@ -33,23 +33,23 @@ module.exports = class Esplora {
    * @returns {Promise<String>} A promise that returns blockhash string
    */
   blockhash (height) {
+    const url = this.url + '/block-height/' + height;
     const options = {
-      url: this.url + '/block-height/' + height,
       method: 'GET',
       headers: { Accept: 'plain/text' },
       timeout: this.timeout,
-      gzip: true
     }
-    console.log('opentimestamps blockhash')
-    // return requestPromise(options)
-    //   .then(body => {
-    //     if (!body) { throw URLError('Empty body') }
-    //     return body
-    //   }).catch(err => {
-    //     console.error('Response error: ' + err.toString().substr(0, 100))
-    //     throw err
-    //   })
-    return {}
+    // console.log('opentimestamps blockhash')
+    return fetch(url, options)
+      .then(r => r.text())
+      .then(body => {
+        if (!body) { throw URLError('Empty body') }
+        return body
+      }).catch(err => {
+        console.error('Response error: ' + err.toString().substr(0, 100))
+        throw err
+      })
+    // return {}
   }
 
   /**
@@ -58,27 +58,26 @@ module.exports = class Esplora {
    * @returns {Promise<String,Long>} A promise that returns merkleroot and timestamp
    */
   block (hash) {
+    const url = this.url + '/block/' + hash;
     const options = {
-      url: this.url + '/block/' + hash,
       method: 'GET',
       headers: { Accept: 'application/json' },
-      json: true,
       timeout: this.timeout,
-      gzip: true
     }
     
-    console.log('opentimestamps block')
-    // return requestPromise(options)
-    //   .then(body => {
-    //     if (!body) { throw URLError('Empty body') }
-    //     if (!body.merkle_root || !body.timestamp) {
-    //       throw URLError(body)
-    //     }
-    //     return { merkleroot: body.merkle_root, time: body.timestamp }
-    //   }).catch(err => {
-    //     console.error('Response error: ' + err.toString().substr(0, 100))
-    //     throw err
-    //   })
-    return {}
+    // console.log('opentimestamps block')
+    return fetch(url, options)
+      .then(r => r.json())
+      .then(body => {
+        if (!body) { throw URLError('Empty body') }
+        if (!body.merkle_root || !body.timestamp) {
+          throw URLError(body)
+        }
+        return { merkleroot: body.merkle_root, time: body.timestamp }
+      }).catch(err => {
+        console.error('Response error: ' + err.toString().substr(0, 100))
+        throw err
+      })
+    // return {}
   }
 }
