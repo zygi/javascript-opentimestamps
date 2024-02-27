@@ -48,7 +48,7 @@ class Timestamp {
    * The message you provide is assumed to be correct; if it causes a op to
    * raise MsgValueError when the results are being calculated (done
    * immediately, not lazily) DeserializationError is raised instead.
-   * @param {StreamDeserializationContext} ctx - The stream deserialization context.
+   * @param {Context.StreamDeserialization} ctx - The stream deserialization context.
    * @param {initialMsg} initialMsg - The initial message.
    * @return {Timestamp} The generated Timestamp.
    */

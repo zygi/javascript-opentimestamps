@@ -105,7 +105,7 @@ module.exports = {
    * @param {number} options.m - at least M calendars replied.
    * @return {Promise<void,Error>} if resolve modified detaches parameter.
    */
-  stamp (detaches, options = {}) {
+  async stamp (detaches, options = {}) {
     // Parse input detaches
     let detachedList
     if (detaches instanceof DetachedTimestampFile) {
@@ -113,13 +113,13 @@ module.exports = {
     } else if (detaches instanceof Array) {
       detachedList = detaches
     } else {
-      return new Promise((resolve, reject) => { reject(new Error('Invalid input')) })
+      throw new Error('Invalid input');
     }
 
     // Build markle tree
     const merkleTip = this.makeMerkleTree(detachedList)
     if (merkleTip === undefined) {
-      return new Promise((resolve, reject) => { reject(new Error('Invalid input')) })
+      throw new Error('Invalid input');
     }
 
     // Parse options : public calendars
@@ -133,17 +133,14 @@ module.exports = {
       }
     } else if (options.m < 0 || options.m > options.calendars.length) {
       console.log('m cannot be greater than available calendar neither less or equal 0')
-      return new Promise((resolve, reject) => {
-        reject(new Error('m cannot be greater than available calendar neither less or equal 0'))
-      })
+      throw new Error('m cannot be greater than available calendar neither less or equal 0');
     }
 
     // Build timestamp from the merkle root
-    return this.createTimestamp(merkleTip, options.calendars, options.m).then(timestamp => {
-      if (timestamp === undefined) {
-        throw new Error('Error on timestamp creation')
-      }
-    })
+    const timestamp = await this.createTimestamp(merkleTip, options.calendars, options.m);
+    if (timestamp === undefined) {
+      throw new Error('Error on timestamp creation')
+    }
   },
 
   /**
@@ -163,7 +160,8 @@ module.exports = {
       })
     }
 
-    return Promise.all(res.map(Utils.softFail))
+    return Promise.all(res)
+    // return Promise.all(res.map(Utils.softFail))
       .then(results => {
         // console.log('results=' + results);
         results

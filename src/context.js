@@ -39,8 +39,6 @@ class StreamDeserializationContext {
     this.buffer = []
     if (stream instanceof Buffer) {
       this.buffer = stream
-    } else if (stream instanceof ArrayBuffer) {
-      this.buffer = stream
     } else if (stream instanceof Uint8Array) {
       this.buffer = stream
     } else if (typeof (stream) === 'string') {
@@ -51,6 +49,8 @@ class StreamDeserializationContext {
       // Avoid using extended native objects
       // const uint8Array = Uint8Array.from(stream);
       this.buffer = Buffer.from(stream)
+    } else {
+      throw new TypeError('StreamDeserializationContext() expected Buffer, Uint8Array, string or Array; got ' + typeof (stream))
     }
     this.counter = 0
   }

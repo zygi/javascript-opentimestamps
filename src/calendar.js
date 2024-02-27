@@ -8,6 +8,7 @@
  */
 
 // const requestPromise = require('request-promise')
+const fetch = require('cross-fetch');
 const minimatch = require('minimatch')
 require('./extend-error.js')
 if (URL === undefined) {
@@ -22,7 +23,17 @@ const Timestamp = require('./timestamp.js')
 
 /* Errors */
 const CommitmentNotFoundError = Error.extend('CommitmentNotFoundError')
-const URLError = Error.extend('URLError')
+class URLError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.status = status;
+  }
+
+  toString() {
+    return this.message + ' status=' + this.status
+  }
+}
+
 const ExceededSizeError = Error.extend('ExceededSizeError')
 
 /** Class representing Remote Calendar server interface */
@@ -31,7 +42,7 @@ class RemoteCalendar {
    * Create a RemoteCalendar.
    * @param {string} url - The server url.
    */
-  constructor (url) {
+  constructor(url) {
     this.url = url
     this.headers = {
       Accept: 'application/vnd.opentimestamps.v1',
@@ -43,24 +54,11 @@ class RemoteCalendar {
   }
 
   /**
-   * This callback is called when the result is loaded.
-   * @callback resolve
-   * @param {Timestamp} timestamp - The timestamp of the Calendar response.
-   */
-
-  /**
-   * This callback is called when the result fails to load.
-   * @callback reject
-   * @param {Error} error - The error that occurred while loading the result.
-   */
-
-  /**
    * Submitting a digest to remote calendar. Returns a Timestamp committing to that digest.
    * @param {byte[]} digest - The digest hash to send.
-   * @returns {Promise} A promise that returns {@link resolve} if resolved
-   * and {@link reject} if rejected.
+   * @returns {Promise<Timestamp>} A promise that returns a Timestamp.
    */
-  submit (digest) {
+  async submit(digest) {
     const options = {
       url: new URL('/digest', this.url),
       method: 'POST',
@@ -69,19 +67,17 @@ class RemoteCalendar {
       encoding: null,
       body: Buffer.from(digest)
     }
-    console.log('opentimestamps submit')
-    // return requestPromise(options)
-    //   .then(body => {
-    //     if (body.size > 10000) {
-    //       throw new ExceededSizeError('Calendar response exceeded size limit')
-    //     }
-    //     const ctx = new Context.StreamDeserialization(body)
-    //     const timestamp = Timestamp.deserialize(ctx, digest)
-    //     return timestamp
-    //   }).catch(err => {
-    //     throw new URLError(err.error.toString())
-    //   })
-    return {}
+    const response = await fetch(options.url, options)
+    if (!response.ok) {
+      throw new URLError(response.statusText, response.status)
+    }
+    const body = new Uint8Array(await response.arrayBuffer());
+    if (body.size > 10000) {
+      throw new ExceededSizeError('Calendar response exceeded size limit')
+    }
+    const ctx = new Context.StreamDeserialization(body)
+    const timestamp = Timestamp.deserialize(ctx, digest)
+    return timestamp
   }
 
   /**
@@ -90,7 +86,7 @@ class RemoteCalendar {
    * @returns {Promise} A promise that returns {@link resolve} if resolved
    * and {@link reject} if rejected.
    */
-  getTimestamp (commitment) {
+  getTimestamp(commitment) {
     const options = {
       url: new URL('/timestamp/' + Utils.bytesToHex(commitment), this.url),
       method: 'GET',
@@ -99,7 +95,7 @@ class RemoteCalendar {
       encoding: null
     }
 
-    console.log('opentimestamps getTimestamp')
+    // console.log('opentimestamps getTimestamp')
     // return requestPromise(options)
     //   .then(body => {
     //     if (body.size > 10000) {
@@ -114,12 +110,13 @@ class RemoteCalendar {
     //     }
     //     throw new Error(err.error.toString())
     //   })
-    return {}
+    // return {}
+    throw new Error('Not implemented')
   }
 }
 
 class UrlWhitelist {
-  constructor (urls) {
+  constructor(urls) {
     this.urls = new Set()
     if (!urls) {
       return
@@ -127,7 +124,7 @@ class UrlWhitelist {
     urls.forEach(u => this.add(u))
   }
 
-  add (url) {
+  add(url) {
     if (typeof (url) !== 'string') {
       throw new TypeError('URL must be a string')
     }
@@ -139,11 +136,11 @@ class UrlWhitelist {
     }
   }
 
-  contains (url) {
+  contains(url) {
     return [...this.urls].filter(u => minimatch(url, u)).length > 0
   }
 
-  toString () {
+  toString() {
     return 'UrlWhitelist([' + this.urls.join(',') + '])'
   }
 }
@@ -155,11 +152,11 @@ const DEFAULT_CALENDAR_WHITELIST = new UrlWhitelist(
   ])
 
 const DEFAULT_AGGREGATORS =
-['https://a.pool.opentimestamps.org',
-  'https://b.pool.opentimestamps.org',
-  'https://a.pool.eternitywall.com',
-  'https://ots.btc.catallaxy.com'
-]
+  ['https://a.pool.opentimestamps.org',
+    'https://b.pool.opentimestamps.org',
+    'https://a.pool.eternitywall.com',
+    'https://ots.btc.catallaxy.com'
+  ]
 
 module.exports = {
   RemoteCalendar,

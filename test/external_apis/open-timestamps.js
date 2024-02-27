@@ -1,12 +1,12 @@
 
 const test = require('tape')
 const rp = require('request-promise')
-const Utils = require('../src/utils.js')
-const OpenTimestamps = require('../src/open-timestamps.js')
-const DetachedTimestampFile = require('../src/detached-timestamp-file.js')
-const Context = require('../src/context.js')
-const Ops = require('../src/ops.js')
-const Notary = require('../src/notary.js')
+const Utils = require('../../src/utils.js')
+const OpenTimestamps = require('../../src/open-timestamps.js')
+const DetachedTimestampFile = require('../../src/detached-timestamp-file.js')
+const Context = require('../../src/context.js')
+const Ops = require('../../src/ops.js')
+const Notary = require('../../src/notary.js')
 
 // const Timestamp = require('../timestamp.js');
 const baseUrl = 'https://raw.githubusercontent.com/opentimestamps/javascript-opentimestamps/master'
