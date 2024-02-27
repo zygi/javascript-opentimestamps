@@ -4,7 +4,8 @@
 const fs = require('fs')
 const fsp = require('node:fs/promises');
 
-const program = require('commander')
+const { Command } = require('commander');
+
 const moment = require('moment-timezone')
 const OpenTimestamps = require('./src/open-timestamps.js')
 const Utils = require('./src/utils.js')
@@ -25,6 +26,8 @@ function collect(val, memo) {
     return memo
 }
 
+const program = new Command();
+
 program
     .version(require('./package.json').version)
     .option('-v, --verbose', 'Be more verbose.')
@@ -42,7 +45,6 @@ const infoCommand = program
             console.log(infoCommand.helpInformation())
             return
         }
-        options = parseCommon(options)
         info(file, options)
     })
 
@@ -74,7 +76,6 @@ const stampCommand = program
             console.log(title + ' stamp: ' + options.algorithm + ' unsupported ')
             return
         }
-        options = parseCommon(options)
         stamp(files, options)
     })
 
@@ -110,7 +111,6 @@ const verifyCommand = program
             console.log(title + ' verify: ' + options.timeout + ' negative value ')
             return
         }
-        options = parseCommon(options)
         verify(file, options)
     })
 
@@ -126,7 +126,6 @@ const upgradeCommand = program
             return
         }
         options.calendars = options.calendar
-        options = parseCommon(options)
         upgrade(file, options)
     })
 
@@ -134,24 +133,6 @@ program.parse(process.argv)
 
 if (!isExecuted) {
     console.log(program.helpInformation())
-}
-
-// FUNCTIONS
-function parseCommon(options) {
-    let whitelist = new Calendar.UrlWhitelist()
-    if (options.parent.defaultWhitelist) {
-        whitelist = Calendar.DEFAULT_CALENDAR_WHITELIST
-    }
-    options.parent.whitelist.forEach(url => {
-        whitelist.add(url)
-    })
-    options.whitelist = whitelist
-
-    if (options.parent.verbose) {
-        options.verbose = true
-    }
-
-    return options
 }
 
 function info(argsFileOts, options) {
