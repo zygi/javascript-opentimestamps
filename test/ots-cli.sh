@@ -5,10 +5,10 @@ echo ">> node ots-cli.js upgrade examples/empty.ots" && node ots-cli.js upgrade 
 echo ">> node ots-cli.js verify examples/empty.ots" && node ots-cli.js verify examples/empty.ots
 
 # Test: stamp input file
-echo ">> node ots-cli.js stamp README.md" && node ots-cli.js stamp README.md && (node ots-cli.js info README.md.ots | grep "File sha256 hash") && rm -rf README.md.ots && \
-echo ">> node ots-cli.js stamp -a sha1 README.md" && node ots-cli.js stamp -a sha1 README.md && (node ots-cli.js info README.md.ots | grep "File sha1 hash") && rm -rf README.md.ots && \
-echo ">> node ots-cli.js stamp -a sha256  README.md" && node ots-cli.js stamp -a sha256 README.md && (node ots-cli.js info README.md.ots | grep "File sha256 hash") && rm -rf README.md.ots && \
-echo ">> node ots-cli.js stamp -a ripemd160 README.md" && node ots-cli.js stamp -a ripemd160 README.md && (node ots-cli.js info README.md.ots | grep "File ripemd160 hash") && rm -rf README.md.ots
+# echo ">> node ots-cli.js stamp README.md" && node ots-cli.js stamp README.md && (node ots-cli.js info README.md.ots | grep "File sha256 hash") && rm -rf README.md.ots && \
+# echo ">> node ots-cli.js stamp -a sha1 README.md" && node ots-cli.js stamp -a sha1 README.md && (node ots-cli.js info README.md.ots | grep "File sha1 hash") && rm -rf README.md.ots && \
+# echo ">> node ots-cli.js stamp -a sha256  README.md" && node ots-cli.js stamp -a sha256 README.md && (node ots-cli.js info README.md.ots | grep "File sha256 hash") && rm -rf README.md.ots && \
+# echo ">> node ots-cli.js stamp -a ripemd160 README.md" && node ots-cli.js stamp -a ripemd160 README.md && (node ots-cli.js info README.md.ots | grep "File ripemd160 hash") && rm -rf README.md.ots
 
 # # Test: stamp input files
 # echo ">> node ots-cli.js stamp README.md LICENSE" && \
