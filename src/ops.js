@@ -7,7 +7,7 @@
  * @license LPGL3
  */
 
-const crypto = require('crypto-browserify')
+const crypto = require('crypto')
 const Utils = require('./utils.js')
 
 const _SUBCLS_BY_TAG = new Map()

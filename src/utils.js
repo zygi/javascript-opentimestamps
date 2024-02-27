@@ -7,7 +7,7 @@
  * @license LPGL3
  */
 
-const crypto = require('crypto-browserify')
+const crypto = require('crypto')
 
 /**
  * Convert a hex string to a byte array
